@@ -1,110 +1,126 @@
-# Next.js Worker Thread Example: Image Resizing
 
-This project demonstrates how to use **worker threads** in **Next.js** to offload CPU-intensive tasks, such as image processing (resizing an image), to separate threads without blocking the main event loop.
 
-## Features
-- Resizes images asynchronously using worker threads.
-- Uses the `sharp` library for image manipulation.
-- Provides an API endpoint (`/api/resize`) to resize images by sending POST requests with width and height parameters.
-- A simple frontend interface to trigger image resizing.
+# **Next.js Worker Thread Image Resizer**
+
+This project demonstrates how to use **worker threads** in **Next.js** to offload CPU-intensive tasks, such as image resizing. It includes a **REST API** to process images asynchronously and a frontend interface for testing.
+
+✅ Uses **Worker Threads** for CPU-heavy image processing  
+✅ Uses **Sharp** for high-performance image manipulation  
+✅ **Resizes images asynchronously** without blocking requests  
+✅ **Automated Tests** to generate 100 images and clean up  
 
 ---
 
-## Prerequisites
-Before running the project, make sure you have the following installed:
+## **🚀 Features**
+- Resize **`sample.jpg`** (in `/public`) dynamically with worker threads.
+- Uses **Sharp** for efficient image processing.
+- Saves resized images with **random filenames**.
+- Provides a **Next.js frontend** for testing.
+- Includes a **Jest test suite** to generate & clean up 100 images.
 
-- **Node.js** (v16 or higher recommended)
+---
+
+## **📌 Prerequisites**
+Ensure you have:
+- **Node.js** `>=18.0`
 - **npm** or **yarn**
 
 ---
 
-## Setup Instructions
+## **📥 Installation**
+1. Clone this repository:
 
-### 1. Install Dependencies
 
-First, clone or extract the project and navigate into the project directory:
-
-```sh
-git clone <repository-url>
-cd nextjs-worker-example
-```
-
-Install the necessary dependencies using npm or yarn:
-
-```sh
-npm install
-```
-
-or, if you prefer yarn:
-
-```sh
-yarn install
-```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
 
 ---
 
-### 2. Running the Project
-
-Once dependencies are installed, start the Next.js development server:
-
+## **🚀 Running the Project**
+Start the Next.js development server:
 ```sh
 npm run dev
 ```
-
-This will start the server at `http://localhost:3000`.
-
----
-
-### 3. Testing the Image Resizing
-
-- Open your browser and navigate to `http://localhost:3000`.
-- You'll see a simple interface with input fields for **width** and **height**.
-- Upload a **sample.jpg** image to the `/public` directory if you want to use your own image.
-- Enter the desired width and height values, then click **Resize Image**.
-
-The image will be resized asynchronously by the worker thread, and you will see the resized image displayed on the page.
+Your app will be available at **`http://localhost:3000`**.
 
 ---
 
-## Project Structure
+## **🖼️ Using the Image Resizer**
+### **Frontend UI**
+1. Open **http://localhost:3000**
+2. Enter a **width** and **height**.
+3. Click **"Resize Image"**.
+4. A resized version of `sample.jpg` will be displayed.
 
+### **API Endpoint (`/api/resize`)**
+You can resize images by sending a **POST request**:
+```sh
+curl -X POST http://localhost:3000/api/resize \
+     -H "Content-Type: application/json" \
+     -d '{"width": 300, "height": 200}'
 ```
-nextjs-worker-example/
-│── pages/
-│   ├── api/
-│   │   ├── resize.js  (API route that uses worker threads for resizing images)
-│   │   ├── worker.js  (Worker thread for performing the image resizing)
-│── public/
-│   ├── sample.jpg  (Placeholder image for testing)
-│── package.json
-│── next.config.js  (Next.js configuration)
-│── pages/
-│   ├── index.js    (Frontend to trigger the image resizing)
+Response:
+```json
+{
+  "message": "Image resized successfully",
+  "url": "/resized-abc123.jpg"
+}
+```
+The resized image will be stored in `/public`.
+
+---
+
+## **🧪 Running Tests**
+The project includes Jest tests that:
+1. **Generate 100 resized images**.
+2. **Verify** they were created successfully.
+3. **Clean up all generated images**.
+
+### **Run Tests**
+```sh
+npm run dev  # Ensure the server is running
+npx jest __tests__/resize.test.js
+```
+
+### **Test Suite**
+- **`resize.test.js`** sends 100 resize requests.
+- It **verifies that images were created**.
+- **Deletes** all resized images after tests complete.
+
+---
+
+## **🗑️ Cleanup**
+If you need to manually clean up generated images, run:
+```sh
+rm -rf public/resized-*.jpg
 ```
 
 ---
 
-## Libraries Used
+## **🔧 Troubleshooting**
+### **Sharp Installation Issues**
+If `sharp` fails to install, try:
+```sh
+npm install sharp --unsafe-perm
+```
 
-- **Next.js** – Framework for building React-based web applications.
-- **sharp** – High-performance image processing library.
-- **worker_threads** – Node.js module to manage worker threads.
+### **Jest Throws "Cannot use import statement outside a module"**
+Use `require()` instead of `import` in test files.
 
----
-
-## Notes
-
-- Make sure to have a **sample.jpg** image in the `/public` directory to test the resizing functionality. You can replace this with any image of your choice.
-- The worker thread handles CPU-intensive tasks (image resizing) separately from the main thread to avoid blocking API responses.
-
----
-
-## To Do/Improvements
-
-- **Error Handling:** Add more detailed error handling and fallback mechanisms.
-- **Custom Image Upload:** Implement functionality to upload custom images for resizing.
-- **Scaling:** Explore using a worker thread pool for handling multiple image resizing requests simultaneously.
+### **Test Errors About `node-fetch`**
+For **Node.js <18**, install:
+```sh
+npm install node-fetch --save-dev
+```
+For **Node.js 18+**, remove `node-fetch` and use the built-in `fetch()`.
 
 ---
 
-Let me know if you need more details or help!
+## **💡 Future Improvements**
+- Add support for **file uploads**.
+- Support more **image formats**.
+
+---
+
