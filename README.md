@@ -1,7 +1,3 @@
-Here's a **README.md** to help you get started with the project:
-
----
-
 # Next.js Worker Thread Example: Image Resizing
 
 This project demonstrates how to use **worker threads** in **Next.js** to offload CPU-intensive tasks, such as image processing (resizing an image), to separate threads without blocking the main event loop.
